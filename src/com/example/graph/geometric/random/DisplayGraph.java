@@ -43,16 +43,16 @@ public class DisplayGraph extends JPanel {
                         g2d.setColor(Color.red);
                     }                    
                     
-                    int vx = WIDTH / 2 + (int) (v.getX() * WIDTH);
-                    int vy = HEIGHT / 2 + (int) (v.getY() * HEIGHT);
+                    int vx = WIDTH / 2 + (int) (v.getX() * WIDTH/2);
+                    int vy = HEIGHT / 2 + (int) (v.getY() * HEIGHT/2);
                     g2d.fillOval(vx, vy, 5, 5);
                     List<Vertex> neighbors = graph.getAllNeighbors(v);
                     if (neighbors != null) {
                         for (int j = 0; j < neighbors.size(); j++) {
                             Vertex u = neighbors.get(j);
                             if (u.equals(maxDegVertex) || v.equals(maxDegVertex)) {
-                                int ux = WIDTH / 2 + (int) (u.getX() * WIDTH);
-                                int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT);
+                                int ux = WIDTH / 2 + (int) (u.getX() * WIDTH/2);
+                                int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT/2);
                                 g2d.fillOval(ux, uy, 2, 2);
                                 g.setColor(Color.black);
                                 g2d.drawLine(vx, vy, ux, uy);
@@ -66,15 +66,15 @@ public class DisplayGraph extends JPanel {
                 for (int i = 0; i < vertices.length; i++) {
                     g2d.setColor(Color.red);
                     Vertex v = vertices[i];
-                    int vx = WIDTH / 2 + (int) (v.getX() * WIDTH);
-                    int vy = HEIGHT / 2 + (int) (v.getY() * HEIGHT);
+                    int vx = WIDTH / 2 + (int) (v.getX() * WIDTH/2);
+                    int vy = HEIGHT / 2 + (int) (v.getY() * HEIGHT/2);
                     g2d.fillOval(vx, vy, 5, 5);
                     List<Vertex> neighbors = graph.getAllNeighbors(v);
                     if (neighbors != null) {
                         for (int j = 0; j < neighbors.size(); j++) {
                             Vertex u = neighbors.get(j);
-                            int ux = WIDTH / 2 + (int) (u.getX() * WIDTH);
-                            int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT);
+                            int ux = WIDTH / 2 + (int) (u.getX() * WIDTH/2);
+                            int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT/2);
                             g2d.fillOval(ux, uy, 2, 2);
                             g.setColor(Color.black);
                             g2d.drawLine(vx, vy, ux, uy);
