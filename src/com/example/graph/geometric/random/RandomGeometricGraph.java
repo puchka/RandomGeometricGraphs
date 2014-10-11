@@ -19,10 +19,10 @@ public class RandomGeometricGraph {
     private Random rand;
     private double r;
     
-    public RandomGeometricGraph(int numVertices, double r){
+    public RandomGeometricGraph(int numVertices, double r, boolean inOneHemisphere){
         adjacencyList = new Hashtable<Vertex,List<Vertex>>();
         rand = new Random();
-        newGraph(numVertices, r);
+        newGraph(numVertices, r, inOneHemisphere);
         this.r = r;
     }
     
@@ -33,10 +33,10 @@ public class RandomGeometricGraph {
     
     // Create a new graph with given number of vertices and distance
     // r
-    public void newGraph(int numVertices, double r){
+    public void newGraph(int numVertices, double r, boolean inOneHemisphere){
         adjacencyList.clear();
         for(int i=0; i < numVertices; i++){
-            Vertex v = createRandomVertex();
+            Vertex v = createRandomVertex(inOneHemisphere);
             adjacencyList.put(v, new ArrayList<Vertex>());
         }
         
@@ -140,8 +140,14 @@ public class RandomGeometricGraph {
     }
     
     // Create a new vertex with random location in the space (0,0,0) - (1,1,1)
-    private Vertex createRandomVertex(){
-        double z = -1 + 2 * Math.random();
+    private Vertex createRandomVertex(boolean inOneHemisphere){
+        double z;
+        if (inOneHemisphere) {
+            z = Math.random();
+        } else {
+            z = -1 + 2 * Math.random();
+        }
+        
         double theta = Math.random() * 2*Math.PI;
         double x = Math.sqrt(1 - Math.pow(z, 2)) * Math.cos(theta);
         double y = Math.sqrt(1 - Math.pow(z, 2)) * Math.sin(theta);
@@ -176,7 +182,7 @@ public class RandomGeometricGraph {
     public static void main(String args[]){
         
         // create a random geometric graph with 2000 vertices and r = 0.085        
-        RandomGeometricGraph graph = new RandomGeometricGraph(2000, 0.085);     
+        RandomGeometricGraph graph = new RandomGeometricGraph(2000, 0.085, false);     
         // display the graph
         System.out.printf("\nRGG (%d vertices, r = %.3f):\n\n",
                             graph.getNumOfVertices(),
@@ -184,7 +190,7 @@ public class RandomGeometricGraph {
         graph.display();
         
         // create a random geometric graph with 500 vertices and r = 0.094        
-        RandomGeometricGraph graph2 = new RandomGeometricGraph(500, 0.094);     
+        RandomGeometricGraph graph2 = new RandomGeometricGraph(500, 0.094 ,true);     
         // display the graph
         System.out.printf("\nRGG (%d vertices, r = %.3f):\n\n",
                             graph2.getNumOfVertices(),
