@@ -33,11 +33,10 @@ public class DisplayGraph extends JPanel {
         if (graph != null) {
             if (withMinDegree) {
                 Vertex minDegVertex = graph.getVertexWithMinDegree();
-                int minDeg = graph.getAllNeighbors(minDegVertex).size();
                 Vertex[] vertices = graph.getVertices();
                 for (int i = 0; i < vertices.length; i++) {
                     Vertex v = vertices[i];
-                    if(graph.getAllNeighbors(v).size() == minDeg){
+                    if(v.equals(minDegVertex)) {
                         g2d.setColor(Color.green);
                     }
                     else{
@@ -54,8 +53,7 @@ public class DisplayGraph extends JPanel {
                             int ux = WIDTH / 2 + (int) (u.getX() * WIDTH/2);
                             int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT/2);
                             g2d.fillOval(ux, uy, 2, 2);
-                            if(graph.getAllNeighbors(v).size() == minDeg 
-                               || graph.getAllNeighbors(u).size() == minDeg) {
+                            if(v.equals(minDegVertex) || u.equals(minDegVertex)) {
                                 g2d.setColor(Color.blue);
                             }
                             else{
