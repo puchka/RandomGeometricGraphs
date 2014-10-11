@@ -2,11 +2,13 @@ package com.example.graph.geometric.random;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -154,7 +156,93 @@ public class RandomGeometricGraph {
         
         return new Vertex("v"+ adjacencyList.size(), x,y,z);
     }
+    public void planeSweepMethod() {
+        Queue<Vertex> E = new PriorityQueue<Vertex>(2000, new Comparator() {
+
+            @Override
+            public int compare(Object arg0, Object arg1) {
+                Vertex v0 = (Vertex) arg0;
+                Vertex v1 = (Vertex) arg1;
+                double phi0 = Math.asin(v0.getZ());
+                double theta0 = Math.atan(v0.getY()/v0.getX());
+                double phi1 = Math.asin(v1.getZ());
+                double theta1 = Math.atan(v1.getY()/v0.getX());
+                if (phi0 > phi1) {
+                    return -1;
+                }
+                if (phi0 < phi1) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
+        Iterator<Vertex> it = adjacencyList.keySet().iterator();
+        while(it.hasNext()) {
+            Vertex u = it.next();
+            E.add(u);
+            
+        }
+        int n = 0;
+        while (!E.isEmpty()) {
+            Vertex F = E.poll();
+            Queue S = new PriorityQueue<>(200, new Comparator() {
     
+                @Override
+                public int compare(Object arg0, Object arg1) {
+                    Vertex v0 = (Vertex) arg0;
+                    Vertex v1 = (Vertex) arg1;
+                    double phi0 = Math.asin(v0.getZ());
+                    double theta0 = Math.atan(v0.getY()/v0.getX());
+                    double phi1 = Math.asin(v1.getZ());
+                    double theta1 = Math.atan(v1.getY()/v0.getX());
+                    if (theta0 > theta1) {
+                        return -1;
+                    }
+                    if (theta0 < theta1) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
+
+            S.add(F);
+            Vertex s = E.peek();
+            double phiF = Math.asin(F.getZ());
+            double phi = Math.asin(s.getZ());
+            //length of the cord : l = 2*r*SIN(alpha/2)
+            while (2 * Math.sin((phi - phiF) / 2) <= r) {
+                S.add(s);
+                E.remove();
+                s = E.peek();
+                if (s == null) {
+                    break;
+                }
+                phiF = Math.asin(F.getZ());
+                phi = Math.asin(s.getZ());
+                
+            }
+            Vertex cur = (Vertex) S.poll();
+            while (!S.isEmpty() && cur != null) {
+                Vertex next = (Vertex) S.peek();
+                if (next !=null && cur.distanceFrom(next) <= r) {
+                    S.remove();
+                    n++;
+                }
+                cur = (Vertex) S.poll();
+            }
+        }
+        System.out.println("Number of pairs checked for the distance bound edge verification : " + n);
+        System.out.println("The number of all pairs : " + 
+                            fact(adjacencyList.size()) / (2 * fact(adjacencyList.size() - 2)));
+        //return E;
+    }
+    private int fact(int n) {
+        if (n <= 1) {
+            return 1;
+        } else {
+            return n * fact(n - 1);
+        }
+    }
     public static void displayGraph(RandomGeometricGraph graph){
         String title = String.format("Random Geometric Graph (%d vertices, r = %.3f)",graph.getNumOfVertices(), graph.getThresholdDistance());
         JFrame frame = new JFrame(title);
@@ -189,6 +277,10 @@ public class RandomGeometricGraph {
                             graph.getThresholdDistance());
         graph.display();
         
+        // Using the plane sweep method count how many pairs are checked for the distance bound 
+        // edge verification and compare with the number of all pairs.
+        graph.planeSweepMethod();
+        
         // create a random geometric graph with 500 vertices and r = 0.094        
         RandomGeometricGraph graph2 = new RandomGeometricGraph(500, 0.094 ,true);     
         // display the graph
@@ -212,5 +304,6 @@ public class RandomGeometricGraph {
         
         // get average degree
         System.out.println("Average Degree = " + graph2.getAverageDegree());
+        
     }
 }
