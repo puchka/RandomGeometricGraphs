@@ -2,6 +2,7 @@ package com.example.graph.geometric.random;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -233,14 +234,23 @@ public class RandomGeometricGraph {
         }
         System.out.println("Number of pairs checked for the distance bound edge verification : " + n);
         System.out.println("The number of all pairs : " + 
-                            fact(adjacencyList.size()) / (2 * fact(adjacencyList.size() - 2)));
+                            fact(adjacencyList.size()).divide(BigInteger.valueOf(2).multiply(fact(adjacencyList.size() - 2))));
         //return E;
     }
-    private int fact(int n) {
-        if (n <= 1) {
-            return 1;
-        } else {
-            return n * fact(n - 1);
+    public static BigInteger fact(int a)
+    {
+        BigInteger factorial = BigInteger.ONE;
+
+        BigInteger factz = BigInteger.ONE;
+
+        if(a == 1)
+        {
+            return factorial;
+        }
+
+        else
+        {
+            return factz.multiply(fact(a-1));
         }
     }
     public static void displayGraph(RandomGeometricGraph graph){
