@@ -12,11 +12,11 @@ import javax.swing.JPanel;
 public class DisplayGraph extends JPanel {
 
     private RandomGeometricGraph graph;
-    private boolean withMaxDegree = false;
+    private boolean withMinDegree = true;
 
-    public DisplayGraph(RandomGeometricGraph graph, boolean withMaxDegreeEdges) {
+    public DisplayGraph(RandomGeometricGraph graph, boolean withMinDegreeEdges) {
         this.graph = graph;
-        this.withMaxDegree = withMaxDegreeEdges;
+        this.withMinDegree = withMinDegreeEdges;
         //this.setSize(400, 400);
     }
 
@@ -31,12 +31,13 @@ public class DisplayGraph extends JPanel {
         int WIDTH = this.getWidth();
         int HEIGHT = this.getHeight();
         if (graph != null) {
-            if (withMaxDegree) {
-                Vertex maxDegVertex = graph.getVertexWithMaxDegree();
+            if (withMinDegree) {
+                Vertex minDegVertex = graph.getVertexWithMinDegree();
+                int minDeg = graph.getAllNeighbors(minDegVertex).size();
                 Vertex[] vertices = graph.getVertices();
                 for (int i = 0; i < vertices.length; i++) {
                     Vertex v = vertices[i];
-                    if(v.equals(maxDegVertex)){
+                    if(graph.getAllNeighbors(v).size() == minDeg){
                         g2d.setColor(Color.green);
                     }
                     else{
@@ -50,13 +51,17 @@ public class DisplayGraph extends JPanel {
                     if (neighbors != null) {
                         for (int j = 0; j < neighbors.size(); j++) {
                             Vertex u = neighbors.get(j);
-                            if (u.equals(maxDegVertex) || v.equals(maxDegVertex)) {
-                                int ux = WIDTH / 2 + (int) (u.getX() * WIDTH/2);
-                                int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT/2);
-                                g2d.fillOval(ux, uy, 2, 2);
-                                g.setColor(Color.black);
-                                g2d.drawLine(vx, vy, ux, uy);
+                            int ux = WIDTH / 2 + (int) (u.getX() * WIDTH/2);
+                            int uy = HEIGHT / 2 + (int) (u.getY() * HEIGHT/2);
+                            g2d.fillOval(ux, uy, 2, 2);
+                            if(graph.getAllNeighbors(v).size() == minDeg 
+                               || graph.getAllNeighbors(u).size() == minDeg) {
+                                g2d.setColor(Color.blue);
                             }
+                            else{
+                                g.setColor(Color.black);
+                            }
+                            g2d.drawLine(vx, vy, ux, uy);
 
                         }
                     }

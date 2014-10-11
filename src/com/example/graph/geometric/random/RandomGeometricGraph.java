@@ -167,7 +167,7 @@ public class RandomGeometricGraph {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-    public static void displayGraphWithMaxDegree(RandomGeometricGraph graph){
+    public static void displayGraphWithMinDegree(RandomGeometricGraph graph){
         String title = String.format("Random Geometric Graph (%d vertices, r = %.3f)",graph.getNumOfVertices(), graph.getThresholdDistance());
         JFrame frame = new JFrame(title);
         DisplayGraph display = new DisplayGraph(graph, true);
@@ -196,7 +196,7 @@ public class RandomGeometricGraph {
                             graph2.getNumOfVertices(),
                             graph2.getThresholdDistance());
         graph2.display();
-        displayGraph(graph2);
+        displayGraphWithMinDegree(graph2);
         
         // get the vertex with max degree
         Vertex vMax = graph2.getVertexWithMaxDegree();
