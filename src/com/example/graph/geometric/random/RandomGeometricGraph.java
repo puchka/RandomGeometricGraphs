@@ -241,15 +241,10 @@ public class RandomGeometricGraph {
     {
         BigInteger factorial = BigInteger.ONE;
 
-        BigInteger factz = BigInteger.ONE;
-
-        if(a == 1)
-        {
+        BigInteger factz = BigInteger.valueOf(a);
+        if(a == 1) {
             return factorial;
-        }
-
-        else
-        {
+        } else {
             return factz.multiply(fact(a-1));
         }
     }
